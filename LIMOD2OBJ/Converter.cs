@@ -1,39 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Threading;
 
 namespace LIMOD2OBJ
 {
-	internal class LIMOD2OBJ
+	internal class Converter
 	{
 		static FileStream modFile;
 		static BinaryReader br;
 		static string fileName = "";
-
-		//Getting the file
-		static void Main(string[] args)
-		{
-			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-			if (args.Length > 0)
-			{
-				Preparation(args[0]);
-			}
-			else
-			{
-				Console.WriteLine("Drag & Drop a .MOD file.");
-				Preparation(Console.ReadLine().Replace("\"", ""));
-			}
-		}
-
-		//This is where the main script is
-		static void Preparation(string filePath = "")
+		static string outputDirectory = "";
+		public static void ConvertMOD(string filePath = "", bool outputConsole = false, string outputFolder = "")
 		{
 			modFile = File.OpenRead(filePath);
 			br = new BinaryReader(modFile);
-
+			outputDirectory = outputFolder;
 
 			uint magicNumber = br.ReadUInt32();
 			uint dataLength;
@@ -44,12 +26,15 @@ namespace LIMOD2OBJ
 				version = br.ReadUInt32();
 				modFile.Seek(8, SeekOrigin.Current);
 				fileName = new string(br.ReadChars(br.ReadInt32()));
-				Console.WriteLine("Completely valid .MOD file!");
+				if (outputConsole)
+					Console.WriteLine("Completely valid .MOD file!");
 
-				modFile.Seek(16 * br.ReadUInt32(), SeekOrigin.Current);
-				modFile.Seek(16 * br.ReadUInt32(), SeekOrigin.Current);
+				modFile.Seek(16 * br.ReadUInt16(), SeekOrigin.Current);
+				modFile.Seek(20 * br.ReadUInt16(), SeekOrigin.Current);
+                modFile.Seek(16 * br.ReadUInt16(), SeekOrigin.Current);
+                modFile.Seek(5 * br.ReadUInt16(), SeekOrigin.Current);
 
-				uint objHeaderCount = br.ReadUInt32();
+                uint objHeaderCount = br.ReadUInt32();
 				for (uint obj = 0; obj < objHeaderCount; obj++)
 				{
 					string objName = new string(br.ReadChars(br.ReadInt32()));
@@ -57,7 +42,8 @@ namespace LIMOD2OBJ
 					modFile.Seek(20 * br.ReadUInt16(), SeekOrigin.Current);
 					modFile.Seek(4, SeekOrigin.Current);
 					objHeaderCount += br.ReadUInt32();
-					Console.WriteLine(objName);
+					if (outputConsole)
+						Console.WriteLine(objName);
 				}
 
 				uint objCount = 1;
@@ -65,12 +51,13 @@ namespace LIMOD2OBJ
 				for (uint obj = 0; obj < objCount; obj++)
 				{
 					string objName = new string(br.ReadChars(br.ReadInt32()));
-					Console.WriteLine(objName);
+					if (outputConsole)
+						Console.WriteLine(objName);
 					modFile.Seek(40, SeekOrigin.Current);
 					string objAltName = new string(br.ReadChars(br.ReadInt32()));
 					if (br.ReadByte() != 1)
 					{
-						ParseModel(objName);
+						ParseModel(objName, outputConsole);
 					}
 					objCount += br.ReadUInt32();
 				}
@@ -80,9 +67,9 @@ namespace LIMOD2OBJ
 				for (uint texture = 0; texture < textureCount; texture++)
 				{
 					string textureName = new string(br.ReadChars(br.ReadInt32()));
-					ParseTexture(textureName.Replace("^", ""));
+					ConvertTEX(textureName.Replace("^", ""));
 					if (textureName[0] == '^')
-						ParseTexture(textureName.Replace("^", "hidden_"));
+						ConvertTEX(textureName.Replace("^", "hidden_"));
 				}
 			}
 			else if (magicNumber > 19) //Wowza! .MOD files from sub0?!
@@ -90,30 +77,33 @@ namespace LIMOD2OBJ
 				dataLength = magicNumber;
 				version = br.ReadUInt32();
 				fileName = new string(br.ReadChars(br.ReadInt32()));
-				Console.WriteLine("Must be one of those sub0 .MOD files");
-				ParseModel(fileName);
+				if (outputConsole)
+					Console.WriteLine("Must be one of those sub0 .MOD files");
+				ParseModel(fileName, outputConsole);
 
 				uint textureCount = br.ReadUInt32();
 				for (uint texture = 0; texture < textureCount; texture++)
 				{
 					string textureName = new string(br.ReadChars(br.ReadInt32()));
-					ParseTexture(textureName);
+					ConvertTEX(textureName);
 				}
 			}
 			else //Probably a universal, who knows.
 			{
 				fileName = new string(br.ReadChars((int)magicNumber));
-				Console.WriteLine("Wow! A universal .MOD file?");
-				ParseModel(fileName);
+				if (outputConsole)
+					Console.WriteLine("Wow! A universal .MOD file?");
+				ParseModel(fileName, outputConsole, true);
 			}
-			Console.WriteLine(fileName);
+			if (outputConsole)
+				Console.WriteLine(fileName);
 
 			br.Close();
 			modFile.Close();
 		}
 
 		//Interesting stuff
-		static void ParseModel(string modelName)
+		static void ParseModel(string modelName, bool outputConsole = false, bool universalModel = false)
 		{
 			uint LODCount = br.ReadUInt32();
 			if (LODCount <= 0)
@@ -144,7 +134,8 @@ namespace LIMOD2OBJ
 					vertices[vertex, 0] = br.ReadSingle();
 					vertices[vertex, 1] = br.ReadSingle();
 					vertices[vertex, 2] = br.ReadSingle();
-					Console.WriteLine("Vertex " + vertex + ": " + vertices[vertex, 0] + ", " + vertices[vertex, 1] + ", " + vertices[vertex, 2]);
+					if (outputConsole)
+						Console.WriteLine("Vertex " + vertex + ": " + vertices[vertex, 0] + ", " + vertices[vertex, 1] + ", " + vertices[vertex, 2]);
 				}
 
 				//Normals
@@ -154,7 +145,8 @@ namespace LIMOD2OBJ
 					normals[normal, 0] = br.ReadSingle();
 					normals[normal, 1] = br.ReadSingle();
 					normals[normal, 2] = br.ReadSingle();
-					Console.WriteLine("Normal " + normal + ": " + normals[normal, 0] + ", " + normals[normal, 1] + ", " + normals[normal, 2]);
+					if (outputConsole)
+						Console.WriteLine("Normal " + normal + ": " + normals[normal, 0] + ", " + normals[normal, 1] + ", " + normals[normal, 2]);
 				}
 
 				//UV maps
@@ -163,7 +155,8 @@ namespace LIMOD2OBJ
 				{
 					uvs[uv, 0] = br.ReadSingle();
 					uvs[uv, 1] = br.ReadSingle();
-					Console.WriteLine("UV " + uv + ": " + uvs[uv, 0] + ", " + uvs[uv, 1]);
+					if (outputConsole)
+						Console.WriteLine("UV " + uv + ": " + uvs[uv, 0] + ", " + uvs[uv, 1]);
 				}
 				ushort[][,,] triangles = new ushort[materialCount][,,];
 				uint[][,] uvIndices = new uint[materialCount][,];
@@ -211,9 +204,11 @@ namespace LIMOD2OBJ
 					bool materialTransparent = br.ReadBoolean();
 					modFile.Seek(1, SeekOrigin.Current);
 					string gifName = new string(br.ReadChars(br.ReadInt32()));
-					Console.WriteLine(gifName);
+					if (outputConsole)
+						Console.WriteLine(gifName);
 					string materialName = new string(br.ReadChars(br.ReadInt32()));
-					Console.WriteLine(materialName + ": " + materialColor[0] + ", " + materialColor[1] + ", " + materialColor[2]);
+					if (outputConsole)
+						Console.WriteLine(materialName + ": " + materialColor[0] + ", " + materialColor[1] + ", " + materialColor[2]);
 					materialNames[material] = materialName;
 					materialAlphas[material] = materialAlpha;
 					materialsSmooth[material] = materialSmooth;
@@ -223,13 +218,13 @@ namespace LIMOD2OBJ
 					materialColors[material] = materialColor;
 					materialTextures[material] = gifName;
 				}
-				CreateMTL(modelName + "_" + (LODCount - 1 - lod), materialNames, materialAlphas, materialsSpecular, materialsTransparent, materialColors, materialTextures);
+				CreateMTL(modelName + "_" + (LODCount - 1 - lod), materialNames, materialAlphas, materialsSpecular, materialsTransparent, materialColors, materialTextures, universalModel);
 				ConvertToOBJ(modelName + "_" + (LODCount - 1 - lod), vertices, normals, uvs, materialNames, materialsSmooth, triangles, uvIndices);
 			}
 		}
 
 		//Not so interesting stuff
-		static void ParseTexture(string textureName)
+		static void ConvertTEX(string textureName)
 		{
 			uint width = br.ReadUInt32();
 			uint height = br.ReadUInt32();
@@ -249,10 +244,10 @@ namespace LIMOD2OBJ
 			ConvertToBMP(textureName, width, height, palette, pixels);
 		}
 
-		static void CreateMTL(string modelName, string[] materialNames, float[] materialAlphas, byte[] materialsSpecular, bool[] materialsTransparent, byte[][] materialColors, string[] materialTextures)
+		static void CreateMTL(string modelName, string[] materialNames, float[] materialAlphas, byte[] materialsSpecular, bool[] materialsTransparent, byte[][] materialColors, string[] materialTextures, bool universalModel = false)
 		{
-			Directory.CreateDirectory(fileName);
-			FileStream mtlFile = new FileStream(fileName + @"\" + modelName + ".MTL", FileMode.Create);
+			Directory.CreateDirectory(outputDirectory + @"\" + fileName);
+			FileStream mtlFile = new FileStream(outputDirectory + @"\" + fileName + @"\" + modelName + ".MTL", FileMode.Create);
 			StreamWriter sw = new StreamWriter(mtlFile, Encoding.ASCII);
 			sw.AutoFlush = true;
 			for (int material = 0; material < materialNames.Length; material++)
@@ -266,19 +261,24 @@ namespace LIMOD2OBJ
 				else
 					sw.WriteLine("Ks 0.0 0.0 0.0");
 				sw.WriteLine("Ns " + (materialsSpecular[material] / 511f * 1000));
-				if (materialsTransparent[material] && materialAlphas[material] > 0)
-					sw.WriteLine("d " + materialAlphas[material]);
+				//if (materialsTransparent[material])
+				sw.WriteLine("d " + (1f - materialAlphas[material]));
 				sw.WriteLine("illum 2");
 				if (materialTextures[material] != "")
-					sw.WriteLine("map_Kd " + materialTextures[material].Replace(".GIF", ".BMP").Replace(".gif", ".bmp").Replace("^", ""));
+					if (universalModel)
+                        sw.WriteLine(@"map_Kd ..\" + materialTextures[material].Replace(".GIF", ".BMP").Replace(".gif", ".bmp").Replace("^", ""));
+                    else
+						sw.WriteLine("map_Kd " + materialTextures[material].Replace(".GIF", ".BMP").Replace(".gif", ".bmp").Replace("^", ""));
 			}
+			sw.Close();
+			mtlFile.Close();
 		}
 
 		//A popular and easy format
 		static void ConvertToOBJ(string modelName, float[,] vertices, float[,] normals, float[,] uvs, string[] materials, bool[] materialsSmooth, ushort[][,,] triangles, uint[][,] uvIndices)
 		{
-			Directory.CreateDirectory(fileName);
-			FileStream objFile = new FileStream(fileName + @"\" + modelName + ".OBJ", FileMode.Create);
+			Directory.CreateDirectory(outputDirectory + @"\" + fileName);
+			FileStream objFile = new FileStream(outputDirectory + @"\" + fileName + @"\" + modelName + ".OBJ", FileMode.Create);
 			StreamWriter sw = new StreamWriter(objFile, Encoding.ASCII);
 			sw.AutoFlush = true;
 			sw.WriteLine("mtllib " + modelName + ".MTL");
@@ -330,16 +330,16 @@ namespace LIMOD2OBJ
 								texCrdIndices.Add(uvIndex + 1);
 							else
 								texCrdIndices.Add(null);
-                        }
+						}
 						else
-                        {
-                            vertexIndices.Add((ushort)(vertexDefinition[vertice] + 1));
+						{
+							vertexIndices.Add((ushort)(vertexDefinition[vertice] + 1));
 							normalIndices.Add((ushort)(normalDefinition[vertice] + 1));
-                            if (texCrdDefinition[vertice] != null)
+							if (texCrdDefinition[vertice] != null)
 								texCrdIndices.Add(texCrdDefinition[vertice] + 1);
-                            else
-                                texCrdIndices.Add(null);
-                        }
+							else
+								texCrdIndices.Add(null);
+						}
 					}
 				}
 				vertexIndices.Reverse();
@@ -357,8 +357,8 @@ namespace LIMOD2OBJ
 								if (materialsSmooth[material])
 									face += " " + vertexIndices[vertexIndex + vertex] + "/" + texCrdIndices[vertexIndex + vertex] + "/" + normalIndices[vertexIndex + vertex];
 								else
-                                    face += " " + vertexIndices[vertexIndex + vertex] + "/" + texCrdIndices[vertexIndex + vertex] + "/" + normalIndices[vertexIndex + vertex];
-                            }
+									face += " " + vertexIndices[vertexIndex + vertex] + "/" + texCrdIndices[vertexIndex + vertex] + "/" + normalIndices[vertexIndex + vertex];
+							}
 							else
 							{
 								if (materialsSmooth[material])
@@ -378,14 +378,16 @@ namespace LIMOD2OBJ
 					sw.WriteLine(face);
 				}
 			}
+			sw.Close();
+			objFile.Close();
 		}
 
 		//The closest format to LI's .TEX is .BMP
 		static void ConvertToBMP(string textureName, uint width, uint height, byte[,] palette, byte[] pixels)
 		{
 			uint fileLength = (uint)(width * height + palette.GetLength(0) * 4 + 54);
-			Directory.CreateDirectory(fileName);
-			FileStream bmpFile = new FileStream(fileName + @"\" + textureName.Replace(".GIF", ".BMP").Replace(".gif", ".bmp"), FileMode.Create);
+			Directory.CreateDirectory(outputDirectory + @"\" + fileName);
+			FileStream bmpFile = new FileStream(outputDirectory + @"\" + fileName + @"\" + textureName.Replace(".GIF", ".BMP").Replace(".gif", ".bmp"), FileMode.Create);
 			BinaryWriter bw = new BinaryWriter(bmpFile, Encoding.ASCII);
 			bw.Write("BM".ToCharArray());
 			bw.Write(fileLength);
@@ -410,6 +412,8 @@ namespace LIMOD2OBJ
 				bw.Write((byte)0xff); //A
 			}
 			bw.Write(pixels);
+			bw.Close();
+			bmpFile.Close();
 		}
 	}
 }

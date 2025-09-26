@@ -57,7 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LIMOD2OBJ.cs" />
+    <Compile Include="Extracter.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="MainProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -79,9 +81,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <None Include="Resources\256Icon.ico" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LIMOD2OBJIcon.ico" />
   </ItemGroup>
