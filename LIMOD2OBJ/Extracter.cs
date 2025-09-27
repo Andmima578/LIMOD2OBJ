@@ -8,7 +8,8 @@ namespace LIMOD2OBJ
 	{
 		static FileStream wdbFile;
 		static FileInfo wdbFileInfo;
-		static BinaryReader br;
+		static string wdbFileName = "";
+        static BinaryReader br;
 
 		public static void ParseWDB(string filePath = "", bool convert = false)
 		{
@@ -19,15 +20,16 @@ namespace LIMOD2OBJ
 			wdbFile = File.OpenRead(filePath);
 			br = new BinaryReader(wdbFile);
 			wdbFileInfo = new FileInfo(filePath);
+			wdbFileName = wdbFileInfo.Name.Replace(wdbFileInfo.Extension, "");
 
 			//Grouped Models
-			Directory.CreateDirectory(wdbFileInfo.Name);
+			Directory.CreateDirectory(wdbFileName);
 			uint groups = br.ReadUInt32();
 			for (uint group = 0; group < groups; group++)
 			{
 				string groupName = new string(br.ReadChars(br.ReadInt32() - 1));
 				wdbFile.Seek(1, SeekOrigin.Current);
-				string groupPath = wdbFileInfo.Name + @"\GroupedModels\" + groupName;
+				string groupPath = wdbFileName + @"\GroupedModels\" + groupName;
 				Directory.CreateDirectory(groupPath);
 				for (byte subgroup = 0; subgroup < 2; subgroup++)
 				{
@@ -81,7 +83,7 @@ namespace LIMOD2OBJ
 			}
 
             //Universal Models
-            Directory.CreateDirectory(wdbFileInfo.Name + @"\UniversalModels");
+            Directory.CreateDirectory(wdbFileName + @"\UniversalModels");
             uint universalModelsTexturesSize = br.ReadUInt32();
 			long universalModelsPositionStart = wdbFile.Position;
             uint universalModelsSize = br.ReadUInt32();
@@ -95,11 +97,11 @@ namespace LIMOD2OBJ
                 uint modelOffset = br.ReadUInt32();
 				int modelSize = (int)(universalModelsPositionStart + modelOffset - universalModelsLastPosition);
 				wdbFile.Position = universalModelsLastPosition;
-                FileStream modFile = File.Create(wdbFileInfo.Name + @"\UniversalModels\" + modName + ".MOD", modelSize);
+                FileStream modFile = File.Create(wdbFileName + @"\UniversalModels\" + modName + ".MOD", modelSize);
                 modFile.Write(br.ReadBytes(modelSize), 0, modelSize);
                 modFile.Close();
 				if (convert)
-                    Converter.ConvertMOD(wdbFileInfo.Name + @"\UniversalModels\" + modName + ".MOD", false, wdbFileInfo.Name + @"\UniversalModels");
+                    Converter.ConvertMOD(wdbFileName + @"\UniversalModels\" + modName + ".MOD", false, wdbFileName + @"\UniversalModels");
             }
 
             //Universal Textures
@@ -132,8 +134,8 @@ namespace LIMOD2OBJ
 		static void ConvertToBMP(string folder, string textureName, uint width, uint height, byte[,] palette, byte[] pixels)
 		{
 			uint fileLength = (uint)(width * height + palette.GetLength(0) * 4 + 54);
-			Directory.CreateDirectory(wdbFileInfo.Name + @"\" + folder);
-			FileStream bmpFile = new FileStream(wdbFileInfo.Name + @"\" + folder + @"\" + textureName.Replace(".GIF", ".BMP").Replace(".gif", ".bmp"), FileMode.Create);
+			Directory.CreateDirectory(wdbFileName + @"\" + folder);
+			FileStream bmpFile = new FileStream(wdbFileName + @"\" + folder + @"\" + textureName.Replace(".GIF", ".BMP").Replace(".gif", ".bmp"), FileMode.Create);
 			BinaryWriter bw = new BinaryWriter(bmpFile, Encoding.ASCII);
 			bw.Write("BM".ToCharArray());
 			bw.Write(fileLength);
