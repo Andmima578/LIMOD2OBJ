@@ -1,71 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|c:\\users\\arkis\\documents\\visualstudioprojects\\limod2obj\\limod2obj\\converter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|solutionrelative:limod2obj\\converter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|c:\\users\\arkis\\documents\\visualstudioprojects\\limod2obj\\limod2obj\\extracter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|solutionrelative:limod2obj\\extracter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|c:\\users\\arkis\\documents\\visualstudioprojects\\limod2obj\\limod2obj\\mainprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|solutionrelative:limod2obj\\mainprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Converter.cs",
-              "DocumentMoniker": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\Converter.cs",
-              "RelativeDocumentMoniker": "LIMOD2OBJ\\Converter.cs",
-              "ToolTip": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\Converter.cs",
-              "RelativeToolTip": "LIMOD2OBJ\\Converter.cs",
-              "ViewState": "AgIAAMYAAAAAAAAAAAAowNwAAACuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T03:43:32.732Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Extracter.cs",
-              "DocumentMoniker": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\Extracter.cs",
-              "RelativeDocumentMoniker": "LIMOD2OBJ\\Extracter.cs",
-              "ToolTip": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\Extracter.cs",
-              "RelativeToolTip": "LIMOD2OBJ\\Extracter.cs",
-              "ViewState": "AgIAAGsAAAAAAAAAAAAiwEwAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T04:23:33.76Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainProgram.cs",
-              "DocumentMoniker": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\MainProgram.cs",
-              "RelativeDocumentMoniker": "LIMOD2OBJ\\MainProgram.cs",
-              "ToolTip": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\MainProgram.cs",
-              "RelativeToolTip": "LIMOD2OBJ\\MainProgram.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAgwAoAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T03:41:20.351Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
