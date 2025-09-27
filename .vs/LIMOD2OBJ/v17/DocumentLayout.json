@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|solutionrelative:limod2obj\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|c:\\users\\arkis\\documents\\visualstudioprojects\\limod2obj\\limod2obj\\extracter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\limod2obj\\extracter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{542E4873-A4FD-45AD-A26C-786826C87281}|LIMOD2OBJ\\LIMOD2OBJ.csproj|solutionrelative:limod2obj\\extracter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -28,7 +28,7 @@
               "RelativeDocumentMoniker": "LIMOD2OBJ\\Properties\\AssemblyInfo.cs",
               "ToolTip": "C:\\Users\\arkis\\Documents\\VisualStudioProjects\\LIMOD2OBJ\\LIMOD2OBJ\\Properties\\AssemblyInfo.cs",
               "RelativeToolTip": "LIMOD2OBJ\\Properties\\AssemblyInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-27T01:58:49.249Z",
               "EditorCaption": ""
@@ -43,8 +43,7 @@
               "RelativeToolTip": "LIMOD2OBJ\\Extracter.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-27T01:53:56.064Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-27T01:53:56.064Z"
             }
           ]
         }

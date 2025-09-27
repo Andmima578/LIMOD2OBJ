@@ -357,7 +357,7 @@ namespace LIMOD2OBJ
 								if (materialsSmooth[material])
 									face += " " + vertexIndices[vertexIndex + vertex] + "/" + texCrdIndices[vertexIndex + vertex] + "/" + normalIndices[vertexIndex + vertex];
 								else
-									face += " " + vertexIndices[vertexIndex + vertex] + "/" + texCrdIndices[vertexIndex + vertex] + "/" + normalIndices[vertexIndex + vertex];
+									face += " " + vertexIndices[vertexIndex + vertex] + "/" + texCrdIndices[vertexIndex + vertex] + "/" + normalIndices[vertexIndex + 2];
 							}
 							else
 							{
